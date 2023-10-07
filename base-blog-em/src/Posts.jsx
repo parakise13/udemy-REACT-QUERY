@@ -15,7 +15,9 @@ export function Posts() {
     const [selectedPost, setSelectedPost] = useState(null);
 
     // 첫번째 인자 : queryKey(쿼리의 이름), 두번째 인자 : query function(쿼리를 가져오는 방법)
-    const { data, isError, isLoading, error } = useQuery("posts", fetchPosts);
+    const { data, isError, isLoading, error } = useQuery("posts", fetchPosts, {
+        staleTime: 2000,
+    });
 
     if (isLoading) return <h3>Loading...</h3>;
     if (isError)
