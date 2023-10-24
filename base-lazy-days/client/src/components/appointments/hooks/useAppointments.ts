@@ -16,6 +16,11 @@ import { AppointmentDateMap } from '../types';
 import { getAvailableAppointments } from '../utils';
 import { getMonthYearDetails, getNewMonthYear, MonthYear } from './monthYear';
 
+const commonOptions = {
+  staleTime: 0,
+  cacheTime: 300000,
+};
+
 // for useQuery call
 async function getAppointments(
   year: string,
@@ -84,8 +89,9 @@ export function useAppointments(): UseAppointments {
     queryClient.prefetchQuery(
       [queryKeys.appointments, nextMonthYear.year, nextMonthYear.month],
       () => getAppointments(nextMonthYear.year, nextMonthYear.month),
+      commonOptions,
     );
-  }, [queryClient, monthYear]);
+  }, [queryClient, monthYear, commonOptions]);
 
   // Notes:
   //    1. appointments is an AppointmentDateMap (object with days of month
@@ -100,6 +106,10 @@ export function useAppointments(): UseAppointments {
     {
       // if showAll true면 모든 데이터를 반환하고 아니면 selectFn을 실행
       select: showAll ? undefined : selectFn,
+      ...commonOptions,
+      refetchOnMount: true,
+      refetchOnReconnect: true,
+      refetchOnWindowFocus: true,
     },
   );
 
