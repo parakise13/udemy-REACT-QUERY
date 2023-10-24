@@ -14,7 +14,13 @@ export function useTreatments(): Treatment[] {
   // TODO: get data from server via useQuery
 
   const fallback = [];
-  const { data = fallback } = useQuery(queryKeys.treatments, getTreatments);
+  const { data = fallback } = useQuery(queryKeys.treatments, getTreatments, {
+    staleTime: 60000, // 10minutes
+    cacheTime: 90000, // staleTime보다 cacheTime이 더 빨리끝날 수 없음
+    refetchOnMount: false,
+    refetchOnWindowFocus: false,
+    refetchOnReconnect: false,
+  });
 
   return data;
 }
@@ -23,5 +29,8 @@ export function usePrefetchTreatments(): void {
   const queryClient = useQueryClient();
 
   // 여기서 키는 캐시에서 어느 useQuery가 이 데이터를 찾아야하는지 알려주기 때문에 정말 중요하다. 여기서 사용한 키가 어떤 useQuery를 사용할지 알려주는 것.
-  queryClient.prefetchQuery(queryKeys.treatments, getTreatments);
+  queryClient.prefetchQuery(queryKeys.treatments, getTreatments, {
+    staleTime: 60000, // 10minutes
+    cacheTime: 90000, // staleTime보다 cacheTime이 더 빨리끝날 수 없음
+  });
 }
