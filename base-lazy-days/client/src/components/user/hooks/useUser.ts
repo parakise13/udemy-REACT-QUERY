@@ -30,7 +30,17 @@ interface UseUser {
 export function useUser(): UseUser {
   // TODO: call useQuery to update user data from server
   const queryClient = useQueryClient();
-  const { data: user } = useQuery(queryKeys.user, () => getUser(user));
+  const { data: user } = useQuery(queryKeys.user, () => getUser(user), {
+    //  초기 데이터가 필요할 때마다 로컬스토리지에서 user 가져옴
+    initialData: getStoredUser,
+    onSuccess: (received: User | null) => {
+      if (!received) {
+        clearStoredUser();
+      } else {
+        setStoredUser(received);
+      }
+    },
+  });
 
   // meant to be called from useAuth
   function updateUser(newUser: User): void {
