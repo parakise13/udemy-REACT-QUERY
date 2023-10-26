@@ -91,7 +91,7 @@ export function useAppointments(): UseAppointments {
       () => getAppointments(nextMonthYear.year, nextMonthYear.month),
       commonOptions,
     );
-  }, [queryClient, monthYear, commonOptions]);
+  }, [queryClient, monthYear]);
 
   // Notes:
   //    1. appointments is an AppointmentDateMap (object with days of month
@@ -110,6 +110,7 @@ export function useAppointments(): UseAppointments {
       refetchOnMount: true,
       refetchOnReconnect: true,
       refetchOnWindowFocus: true,
+      refetchInterval: 60000, // every second: not recommended for production => data refetching 간격
     },
   );
 
