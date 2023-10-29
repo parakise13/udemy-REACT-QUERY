@@ -53,6 +53,7 @@ export function useUser(): UseUser {
   function clearUser() {
     // TODO: reset user to null in query cache
     // 사용자가 로그아웃하면 캐시에서 사용자 정보 삭제
+    // 여기서 removeQueries를 사용하지 않고 setQueryData로 null 세팅을 해주는 이유는 사용자 데이터를 변경해서 onSuccess콜백을 발생시킬 때 onSuccess 콜백이 로컬 스토리지에 데이털르 유지하며 setQueryData가 onSuceess를 발생시키기 때문. 즉, onSuccess는 setQueryData 다음에 실행되고 removeQueries 다음에는 실행되지 않는다.
     queryClient.setQueryData(queryKeys.user, null);
   }
 
